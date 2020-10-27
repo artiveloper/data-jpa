@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
+import study.datajpa.entity.Team;
 
 import java.util.List;
 
@@ -16,6 +18,9 @@ class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    TeamRepository teamRepository;
 
     @Test
     void testMember() {
@@ -70,6 +75,21 @@ class MemberRepositoryTest {
         List<Member> findMember = memberRepository.findMember("Member 1", 11);
 
         assertThat(findMember.get(0).getUsername()).isEqualTo("Member 1");
+    }
+
+    @Test
+    void findMemberDtoTest() {
+        Team team = new Team("Team A");
+        Member member1 = new Member("Member 1", 11, team);
+
+        teamRepository.save(team);
+        memberRepository.save(member1);
+
+        List<MemberDto> memberDto = memberRepository.findMemberDto();
+        for (MemberDto dto : memberDto) {
+            System.out.println(dto.getUsername());
+            System.out.println(dto.getTeamName());
+        }
     }
 
 }
