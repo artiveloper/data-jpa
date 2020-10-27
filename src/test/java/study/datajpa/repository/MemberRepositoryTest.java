@@ -59,4 +59,17 @@ class MemberRepositoryTest {
         assertThat(countAfterDeleteAll).isEqualTo(0);
     }
 
+    @Test
+    void queryTest() {
+        Member member1 = new Member("Member 1", 11);
+        Member member2 = new Member("Member 2", 12);
+
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        List<Member> findMember = memberRepository.findMember("Member 1", 11);
+
+        assertThat(findMember.get(0).getUsername()).isEqualTo("Member 1");
+    }
+
 }
