@@ -3,6 +3,9 @@ package study.datajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
@@ -104,6 +107,29 @@ class MemberRepositoryTest {
         List<Member> findMember = memberRepository.findByUsernames(Arrays.asList("Member 1", "Member 2"));
 
         assertThat(findMember.size()).isEqualTo(2);
+    }
+
+    @Test
+    void pagingTest() {
+        Member member;
+        for (int i = 1; i <= 10; i++) {
+            member = new Member("Member " + String.valueOf(i), 10);
+            memberRepository.save(member);
+        }
+
+        int age = 10;
+
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
+        Page<Member> page = memberRepository.findByAge(age, pageRequest);
+
+        List<Member> members = page.getContent();
+
+        assertThat(members.size()).isEqualTo(3);
+        assertThat(page.getTotalElements()).isEqualTo(10);
+        assertThat(page.getNumber()).isEqualTo(0);
+        assertThat(page.getTotalPages()).isEqualTo(4);
+        assertThat(page.isFirst()).isTrue();
+        assertThat(page.hasNext());
     }
 
 }
