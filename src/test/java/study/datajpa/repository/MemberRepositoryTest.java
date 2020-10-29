@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.iterable;
 
 @SpringBootTest
 @Transactional
@@ -145,6 +146,28 @@ class MemberRepositoryTest {
         int resultCount = memberRepository.bulkAgePlus(20);
 
         assertThat(resultCount).isEqualTo(3);
+    }
+
+    @Test
+    void fetchJoinTest() {
+        Team team1 = new Team("Team A");
+        Team team2 = new Team("Team B");
+
+        Member member1 = new Member("Member 1", 11, team1);
+        Member member2 = new Member("Member 2", 19, team2);
+
+        teamRepository.save(team1);
+        teamRepository.save(team2);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        List<Member> membersFetchJoin = memberRepository.findMembersFetchJoin();
+        for (Member member : membersFetchJoin) {
+            System.out.println("member = " + member);
+            System.out.println("member.teamClass = " + member.getTeam().getClass());
+            System.out.println("member.team = " + member.getTeam().getName());
+            System.out.println("==================================================");
+        }
     }
 
 }
