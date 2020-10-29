@@ -34,9 +34,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>, CustomMem
     List<Member> findMembersFetchJoin();
 
     @EntityGraph(attributePaths = {"team"})
-    List<Member> findAllWithEntityGraph();
-
-    @EntityGraph(attributePaths = {"team"})
     @Query("select m from Member m")
     List<Member> findAllWithEntityGraph2();
 
