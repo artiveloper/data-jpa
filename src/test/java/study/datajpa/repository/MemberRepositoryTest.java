@@ -170,4 +170,9 @@ class MemberRepositoryTest {
         }
     }
 
+    @Test
+    void customRepositoryTest() {
+        List<Member> memberCustom = memberRepository.findMemberCustom();
+    }
+
 }
